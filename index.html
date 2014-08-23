@@ -22,9 +22,10 @@
     <link href="css/mod.css" rel="stylesheet">
     <script src="js/jquery.min.js"></script>
     <script src="js/game.js"></script>
+
   </head>
 
-  <body>
+  <body onload="load()">
 
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
@@ -48,10 +49,33 @@
     </div>
 
     <div class="container">
-      <div class="jumbotron">
-        <h1> Connected Worlds </h1>
+      <div class="jumbotron message" id="welcome-jt">
+        <div id="message-part" height="400px">
+          <h1> Welcome, Human </h1>
+          <p>You are a standard human being. You're a good person, most of them time, and sometimes, you act like a bad person. It's fine. Happens to all of us (Even you, Reverend). However, Here's how life works:</p>
+          <p> There are three Yous, all connected. One residing in Hell, one living in Heaven, and the You on Earth. When You perform a good deed, the You in Heaven gets more powerful, while weakening the You in Hell. Similarly, a bad deed leads to the You in Hell getting stronger, and weakens the You in Heaven.</p>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="show_welc2()">Okay... So?</button>
       </div>
-      <table class="table table-bordered borderless"><tbody>
+      <div class="jumbotron message" id="welcome2-jt" style="display:none;">
+        <div id="message-part" height="400px">
+          <h1> Oh shit... </h1>
+          <p>Well, Heaven and Hell are both, simultaneously under attack by Space Invaders. <a href="https://www.youtube.com/watch?v=xIFJLMyUwrg" target="_blank">You're the only person who can help us.</a> We need you to defeat the alien invaders before they become alien overlords. You need to juggle between your Earthly, Heavenly, and Hellllllly versions, making sure they all survive, and that they all are powerful enough to defeat the enemy in front of them.</p>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="show_game()">Start Game</button>
+      </div>
+      <div class="jumbotron message" id="message-jt" style="display:none;">
+        <h1> Connected Worlds </h1>
+        <p id="message"></p>
+        Heaven:<div class="progress"><div id="heaven-health" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;"></div></div>
+        Earth:<div class="progress"><div id="earth-health" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div></div>
+        Hell:<div class="progress"><div id="hell-health" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;"></div></div>
+
+        <button type="button" class="btn btn-primary" onclick="refresh()">Refresh</button>
+      </div>
+
+
+      <table class="table table-bordered borderless" id="game-body"><tbody>
         <tr class="ht">
           <td id="11" class="game col-md-2 earth">
           </td>
