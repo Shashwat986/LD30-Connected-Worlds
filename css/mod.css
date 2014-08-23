@@ -1,0 +1,19 @@
+.borderless tbody tr td, .borderless thead tr th {
+  border: none;
+}
+
+.earth{
+  background-color: #EEFFEE;
+}
+
+.heaven{
+  background-color: #9AD9EA;
+}
+
+.hell{
+  background-color: #FFA66D;
+}
+
+.ht{
+	height:100px;
+}
