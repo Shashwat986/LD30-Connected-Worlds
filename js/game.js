@@ -27,17 +27,58 @@ function load()
 	
 	// Load resources
 	map_earth["11"]="me";
+	map_heaven["11"]="me";
+	map_hell["11"]="me";
+
+	// Hell
+	block_list = []
+	$(".game").each(function(){
+		block_list.push(this.id);
+	});
+
+	block_list.splice(0,1);	// Remove first element.
+
+	var number_of_enemies = Math.floor(Math.random() * 6) + 3;
+
+	for (var i = 0; i < number_of_enemies; i++) {
+		var key = Math.floor(Math.random() * block_list.length);
+		var power = Math.floor(Math.random() * 101);
+		map_hell[block_list[key]] = "e"+parseInt(power);
+		block_list.splice(key,1);
+	};
+
+	// Heaven
+	block_list = []
+	$(".game").each(function(){
+		block_list.push(this.id);
+	});
+
+	block_list.splice(0,1);	// Remove first element.
+
+	var number_of_enemies = Math.floor(Math.random() * 6) + 3;
+
+	for (var i = 0; i < number_of_enemies; i++) {
+		var key = Math.floor(Math.random() * block_list.length);
+		var power = Math.floor(Math.random() * 101);
+		map_heaven[block_list[key]] = "e"+parseInt(power);
+		block_list.splice(key,1);
+	};
+
 	game_status = "earth";
 	refresh();
 }
 
 function to_html(map_char)
 {
-	switch(map_char)
+	switch(true)
 	{
-		case("me"):
-			return '<img src="images/f_earth.png" class="sprite" alt="You"/>';
-			break;
+		case(map_char == "me"):
+			return '<img src="images/f_'+game_status+'.png" class="sprite" alt="You"/>';
+		case(typeof map_char === "undefined"):
+			return "";
+		case(map_char.charAt(0) == "e"):
+			val = Math.floor(Math.random() * 7) + 1;
+			return '<img src="images/enemy'+val+'.png" class="sprite" alt="Power '+map_char.substring(1)+'"/><br/>'+map_char.substring(1);
 		default:
 			return "";
 	}
