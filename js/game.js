@@ -134,8 +134,10 @@ function hell()
 
 // If refresh is called with a parameter, it clears the screen,
 // Else it redraws the screen's status
-function refresh(clear = 0)
+function refresh(clear)
 {
+	clear = typeof clear !== "undefined" ? a : 0;	// Chrome compatibility.
+	
 	$(".game").html("");
 	if (clear == 0)
 		$(".game").html(function(){
