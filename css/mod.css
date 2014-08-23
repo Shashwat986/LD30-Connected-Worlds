@@ -2,8 +2,8 @@
   border: none;
 }
 
-.message-part {
-	min-height: 400px;
+.sprite img {
+  width: 100px;
 }
 
 .earth{

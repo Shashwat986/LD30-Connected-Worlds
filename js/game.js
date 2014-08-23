@@ -9,15 +9,40 @@ function load()
 	$(".message").hide();
 	$("#welcome-jt").show();
 	$("#game-body").hide();
+	var paramArray = window.location.search.substring(1)
+
+	// Skipping welcome message if need be. It gets irritating during testing.
+	if (paramArray){
+		switch(paramArray){
+			case "start":
+				show_game();
+				break;
+			case "w2":
+				show_welc2();
+				break;
+			default:
+				break;
+		}
+	}
 	
 	// Load resources
-	map_earth["11"]="Hello";
+	map_earth["11"]="me";
 	game_status = "earth";
-	$(".game").each(function(){
-		$(this).html(""+ map_earth[this.id]);
-	});
 	refresh();
 }
+
+function to_html(map_char)
+{
+	switch(map_char)
+	{
+		case("me"):
+			return '<img src="images/f_earth.png" class="sprite" alt="You"/>';
+			break;
+		default:
+			return "";
+	}
+}
+
 
 function show_welc2()
 {
@@ -75,13 +100,13 @@ function refresh(clear = 0)
 		$(".game").html(function(){
 			switch(game_status){
 				case "heaven":
-					return map_heaven[this.id];
+					return to_html(map_heaven[this.id]);
 					break;
 				case "hell":
-					return map_hell[this.id];
+					return to_html(map_hell[this.id]);
 					break;
 				case "earth":
-					return map_earth[this.id];
+					return to_html(map_earth[this.id]);
 					break;
 				default:
 					return "";
