@@ -61,11 +61,17 @@ function key_pressed(key)
 				switch(check1.charAt(0))
 				{
 					case 'b':
+						q = deed_query('bad', power);
+						if (q==0)
+							break;
 						my_power["hell"] += power;
 						my_power["heaven"] -= power;
 						send_post("Naughty, naughty!");
 						break;
 					case 'g':
+						q = deed_query('good', power);
+						if (q==0)
+							break;
 						my_power["hell"] -= power;
 						my_power["heaven"] += power;
 						send_post("Good boy!");
@@ -87,8 +93,24 @@ function key_pressed(key)
 	}
 }
 
-function send_post(txt)
+function deed_query(deed, power)
 {
+	var decision = confirm("Perform "+deed+" deed? Adds "+power+" power.");
+	if (decision)
+		return 1;
+	else
+		return 0;
+}
+
+function send_post(txt, perm)
+{
+	perm = typeof (perm !== "undefined") ? perm : 0;
+
+	$("#alert").html(txt);
+	if (perm)
+		$("#alert").fadeIn();
+	else
+		$("#alert").fadeIn().delay(1000).fadeOut();
 	console.log(txt);
 }
 
@@ -128,6 +150,14 @@ function load()
 		game_list.push(this.id);
 	});
 
+	init();
+
+	game_status = "earth";
+	refresh();
+}
+
+function init()
+{
 	// Hell
 	block_list = []
 	$(".game").each(function(){
@@ -154,7 +184,7 @@ function load()
 	block_list.splice(0,1);	// Remove first element (me)
 
 	var number_of_good = Math.floor(Math.random() * 4) + 2;
-	var number_of_bad = Math.floor(Math.random() * 4) + 3;
+	var number_of_bad = Math.floor(Math.random() * 4) + 2;
 
 	for (var i = 0; i < number_of_good; i++) {
 		var key = Math.floor(Math.random() * block_list.length);
@@ -185,9 +215,6 @@ function load()
 		map_heaven[block_list[key]] = "e"+parseInt(power);
 		block_list.splice(key,1);
 	};
-
-	game_status = "earth";
-	refresh();
 }
 
 function to_html(map_char)
@@ -266,7 +293,7 @@ function hell()
 // Else it redraws the screen's status
 function refresh(clear)
 {
-	clear = typeof clear !== "undefined" ? a : 0;	// Chrome compatibility.
+	clear = (typeof clear !== "undefined") ? clear : 0;	// Chrome compatibility.
 
 	$(".game").html("");
 	if (clear == 0)
@@ -287,20 +314,29 @@ function refresh(clear)
 			}
 		});
 
+	my_power["heaven"] = (my_power["heaven"] > 100) ? 100 : my_power["heaven"];
+	my_power["hell"] = (my_power["hell"] > 100) ? 100 : my_power["hell"];
+	my_power["heaven"] = (my_power["heaven"] < 0) ? 0 : my_power["heaven"];
+	my_power["hell"] = (my_power["hell"] < 0) ? 0 : my_power["hell"];
+
 	$("#heaven-health").css("width",my_power["heaven"]+"%");
 	$("#hell-health").css("width",my_power["hell"]+"%");
 	$("#earth-health").css("width",my_power["earth"]+"%");
 
-	$(".sprite").css("width","100px");
-	$(".sprite").css("height","100px");
+	$(".sprite").css("width","90px");
+	$(".sprite").css("height","90px");
 
-	var eg = end_game()
+	var eg = end_game_check()
 	if(eg==1)
 	{
+		send_post("Victory!",1);
+		end_game();
 		// Victory
 	}
 	else if (eg==-1)
 	{
+		send_post("Defeat!",1);
+		end_game();
 		// Loss
 	}
 	else
@@ -312,5 +348,16 @@ function refresh(clear)
 
 function end_game()
 {
+	$("div.navbar").removeClass("navbar-fixed-top");
+	$("#game-body").hide();
+	$(".message").hide();
+}
+
+function end_game_check()
+{
+	if ((me["heaven"] == "36") && (me["earth"] == "36") && (me["hell"] == "36"))
+		return 1;
+	if ((my_power["heaven"] == 0) || (my_power["earth"] == 0) || (my_power["hell"] == 0))
+		return -1;
 	return 0;
 }

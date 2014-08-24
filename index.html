@@ -60,7 +60,7 @@
     <div class="container">
       <div class="jumbotron message" id="welcome-jt">
         <div>
-          <h1> Welcome, Human </h1>
+          <h2> Welcome, Human </h2>
           <p>You are a standard human being. You're a good person, most of them time, and sometimes, you act like a bad person. It's fine. Happens to all of us (Even you, Reverend). However, Here's how life works:</p>
           <p> There are three Yous, all connected. One residing in Hell, one living in Heaven, and the You on Earth. When You perform a good deed, the You in Heaven gets more powerful, while weakening the You in Hell. Similarly, a bad deed leads to the You in Hell getting stronger, and weakens the You in Heaven.</p>
         </div>
@@ -68,21 +68,23 @@
       </div>
       <div class="jumbotron message" id="welcome2-jt" style="display:none;">
         <div>
-          <h1> Oh shit... </h1>
+          <h2> Oh shit... </h2>
           <p>Well, Heaven and Hell are both, simultaneously under attack by Space Invaders. <a href="https://www.youtube.com/watch?v=xIFJLMyUwrg" target="_blank">You're the only person who can help us.</a> We need you to defeat the alien invaders before they become alien overlords. You need to juggle between your Earthly, Heavenly, and Hellllllly versions, making sure they all survive, and that they all are powerful enough to defeat the enemy in front of them.</p>
+          <p>Use the left and right arrow keys to move yourself around. You can view and move the otherworldly versions of yourself by using the appropriate tabs above. Get all three versions of yourself at the end of the grid to win the game.</p>
         </div>
         <button type="button" class="btn btn-primary" onclick="show_game()">Start Game</button>
       </div>
       <div class="jumbotron message" id="message-jt" style="display:none;">
-        <h1> Connected Worlds </h1>
+        <h2> Connected Worlds </h2>
         <p id="message"></p>
-        Heaven:<div class="progress"><div id="heaven-health" class="progress-bar progress-bar-info" role="progressbar" style="width: 50%;"></div></div>
-        Earth:<div class="progress"><div id="earth-health" class="progress-bar progress-bar-success" role="progressbar"style="width: 100%;"></div></div>
-        Hell:<div class="progress"><div id="hell-health" class="progress-bar progress-bar-warning" role="progressbar" style="width: 50%;"></div></div>
-
-        <button type="button" class="btn btn-primary" onclick="refresh()">Refresh</button>
+        <div class="progress"><div id="heaven-health" class="progress-bar progress-bar-info" role="progressbar" style="width: 50%;"><span>Heaven</span></div></div>
+        <div class="progress"><div id="earth-health" class="progress-bar progress-bar-success" role="progressbar"style="width: 100%;"><span>Earth</span></div></div>
+        <div class="progress"><div id="hell-health" class="progress-bar progress-bar-warning" role="progressbar" style="width: 50%;"><span>Hell</span></div></div>
       </div>
 
+      <div class="alert alert-info" role="alert" id="alert" style="display:none">
+        
+      </div>
 
       <table class="table" id="game-body"><tbody>
         <tr class="ht">
@@ -142,5 +144,6 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
   </body>
 </html>
