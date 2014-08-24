@@ -4,7 +4,7 @@ map_earth = {};
 me = {};
 game_status = "earth";
 game_list = [];
-power = { "heaven":50, "hell":50, "earth":100 };
+my_power = { "heaven":50, "hell":50, "earth":100 };
 
 function key_pressed(key)
 {
@@ -15,7 +15,9 @@ function key_pressed(key)
 			var ind = game_list.indexOf(me[game_status]);
 			eval('check1 = map_'+game_status+'[game_list[ind-1]];');
 			eval('check = map_'+game_status+'[game_list[ind]];');
-			if (!check1 && game_list[ind-1])
+			if ((ind-1) < 0)	// If next block is empty
+				return 0;
+			else if (!check1)
 			{
 				eval('map_'+game_status+'[game_list[ind]] = "";');
 				eval('map_'+game_status+'[game_list[ind-1]] = "me";');
@@ -30,8 +32,47 @@ function key_pressed(key)
 			var ind = game_list.indexOf(me[game_status]);
 			eval('check1 = map_'+game_status+'[game_list[ind+1]];');
 			eval('check = map_'+game_status+'[game_list[ind]];');
-			if (!check1 && game_list[ind+1])
+			if ((ind+1) >= game_list.length)	// If at the end of the board
+				return 0;
+			else if (!check1)	// If next block is empty
 			{
+				eval('map_'+game_status+'[game_list[ind]] = "";');
+				eval('map_'+game_status+'[game_list[ind+1]] = "me";');
+				me[game_status] = game_list[ind+1];
+				refresh();
+				return 0;
+			}
+			else if (check1.charAt(0) == 'e')	// If next block has enemy
+			{
+				power = parseInt(check1.substring(1));
+				if (power < my_power[game_status])
+				{
+					send_post("Alien Destroyed!");
+					eval('map_'+game_status+'[game_list[ind]] = "";');
+					eval('map_'+game_status+'[game_list[ind+1]] = "me";');
+					me[game_status] = game_list[ind+1];
+					refresh();
+					return 0;
+				}
+			}
+			else if (check1.charAt(0) == 'b' || check1.charAt(0) == 'g')	// If next block has ability
+			{
+				power = parseInt(check1.substring(1));
+				switch(check1.charAt(0))
+				{
+					case 'b':
+						my_power["hell"] += power;
+						my_power["heaven"] -= power;
+						send_post("Naughty, naughty!");
+						break;
+					case 'g':
+						my_power["hell"] -= power;
+						my_power["heaven"] += power;
+						send_post("Good boy!");
+						break;
+					default:
+						return 0;
+				}
 				eval('map_'+game_status+'[game_list[ind]] = "";');
 				eval('map_'+game_status+'[game_list[ind+1]] = "me";');
 				me[game_status] = game_list[ind+1];
@@ -46,6 +87,10 @@ function key_pressed(key)
 	}
 }
 
+function send_post(txt)
+{
+	console.log(txt);
+}
 
 function load()
 {
@@ -100,6 +145,30 @@ function load()
 		block_list.splice(key,1);
 	};
 
+	// Earth
+	block_list = []
+	$(".game").each(function(){
+		block_list.push(this.id);
+	});
+
+	block_list.splice(0,1);	// Remove first element (me)
+
+	var number_of_good = Math.floor(Math.random() * 4) + 2;
+	var number_of_bad = Math.floor(Math.random() * 4) + 3;
+
+	for (var i = 0; i < number_of_good; i++) {
+		var key = Math.floor(Math.random() * block_list.length);
+		var power = Math.floor(Math.random() * 101);
+		map_earth[block_list[key]] = "g"+parseInt(power);
+		block_list.splice(key,1);
+	};
+	for (var i = 0; i < number_of_bad; i++) {
+		var key = Math.floor(Math.random() * block_list.length);
+		var power = Math.floor(Math.random() * 101);
+		map_earth[block_list[key]] = "b"+parseInt(power);
+		block_list.splice(key,1);
+	};
+
 	// Heaven
 	block_list = []
 	$(".game").each(function(){
@@ -132,14 +201,14 @@ function to_html(map_char)
 		case(typeof map_char === "undefined"):
 			return "";
 		case(map_char.charAt(0) == "e"):
-			val = Math.floor(Math.random() * 7) + 1;
+			val = Math.floor(Math.random() * 5) + 1;
 			return '<img src="images/enemy'+val+'.png" class="sprite" alt="Power '+map_char.substring(1)+'"/><br/>'+map_char.substring(1);
 		case(map_char.charAt(0) == 'g'):
-			val = Math.floor(Math.random() * 7) + 1;
-			return '<img src="images/enemy'+val+'.png" class="sprite" alt="Power '+map_char.substring(1)+'"/><br/>'+map_char.substring(1);
+			//val = Math.floor(Math.random() * 7) + 1;
+			return '<img src="images/good'+1+'.png" class="sprite" alt="Power '+map_char.substring(1)+'"/><br/>'+map_char.substring(1);
 		case(map_char.charAt(0) == 'b'):
 			val = Math.floor(Math.random() * 7) + 1;
-			return '<img src="images/enemy'+val+'.png" class="sprite" alt="Power '+map_char.substring(1)+'"/><br/>'+map_char.substring(1);
+			return '<img src="images/bad'+1+'.png" class="sprite" alt="Power '+map_char.substring(1)+'"/><br/>'+map_char.substring(1);
 		default:
 			return "";
 	}
@@ -218,9 +287,12 @@ function refresh(clear)
 			}
 		});
 
-	$("#heaven-health").css("width",power["heaven"]+"%");
-	$("#hell-health").css("width",power["hell"]+"%");
-	$("#earth-health").css("width",power["earth"]+"%");
+	$("#heaven-health").css("width",my_power["heaven"]+"%");
+	$("#hell-health").css("width",my_power["hell"]+"%");
+	$("#earth-health").css("width",my_power["earth"]+"%");
+
+	$(".sprite").css("width","100px");
+	$(".sprite").css("height","100px");
 
 	var eg = end_game()
 	if(eg==1)
