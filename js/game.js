@@ -5,6 +5,187 @@ me = {};
 game_status = "earth";
 game_list = [];
 my_power = { "heaven":50, "hell":50, "earth":100 };
+glob_level = 1;
+seed = Math.floor(Math.random()*10+1);
+
+num_levels = 4;
+
+function load(level)
+{
+	glob_level = (typeof level !== "undefined") ? level : glob_level;	// Chrome compatibility.
+
+	// Welcome message
+	$("div.navbar").addClass("navbar-fixed-top");
+	$("#alert").hide();
+	$(".message").hide();
+	$("#welcome-jt").show();
+	$("#game-body").hide();
+
+
+
+	var paramArray = window.location.search.substring(1)
+
+	// Skipping welcome message if need be. It gets irritating during testing.
+	if ((paramArray && paramArray == "start") || (level != 1))
+	{
+		show_game();
+	}
+
+	// Initialize starting conditions
+	game_status = "earth";
+	game_list = [];
+	my_power = { "heaven":50, "hell":50, "earth":100 };
+	seed = Math.floor(Math.random()*10+1);
+	
+	// Load resources
+	game_list = []
+	$(".game").each(function(){
+		game_list.push(this.id);
+	});
+
+	load_level(glob_level);
+
+	for (key in map_heaven)
+		if (map_heaven[key] == "me")
+			me["heaven"] = key;
+
+	for (key in map_earth)
+		if (map_earth[key] == "me")
+			me["earth"] = key;
+
+	for (key in map_hell)
+		if (map_hell[key] == "me")
+			me["hell"] = key;
+
+	game_status = "earth";
+	refresh();
+	earth();
+}
+
+function load_level(level)
+{
+	level = (typeof level !== "undefined") ? level : 0;	// Chrome compatibility.
+
+	switch (level)
+	{
+		case 0:
+			init();
+			break;
+		case 1:
+			map_hell = {"36":"me"};
+			map_earth = {"11":"me"};
+			map_heaven = {"36":"me"};
+			break;
+		case 2:
+			map_hell = {"11":"me"};
+			map_earth = {"11":"me", "13":"g10"};
+			map_heaven = {"11":"me", "24":"e59"};
+			break;
+		case 3:
+			map_hell = {"11":"me", "15":"e34", "21":"e59"};
+			map_earth = {"11":"me", "13":"g60", "24":"b10", "33":"g30"};
+			map_heaven = {"11":"me", "24":"e59"};
+			break;
+		case 4:
+			map_hell = {"11":"me", "15":"e34", "21":"e59"};
+			map_earth = {"11":"me", "13":"g60", "24":"b10", "33":"g30"};
+			map_heaven = {"11":"me", "24":"e59"};
+			break;
+		case 5:
+			map_hell = {"11":"me", "15":"e34", "21":"e59"};
+			map_earth = {"11":"me", "13":"g60", "24":"b10", "33":"g30"};
+			map_heaven = {"11":"me", "24":"e59"};
+			break;
+		case 6:
+			map_hell = {"11":"me", "15":"e34", "21":"e59"};
+			map_earth = {"11":"me", "13":"g60", "24":"b10", "33":"g30"};
+			map_heaven = {"11":"me", "24":"e59"};
+			break;
+		case 7:
+			map_hell = {"11":"me", "15":"e34", "21":"e59"};
+			map_earth = {"11":"me", "13":"g60", "24":"b10", "33":"g30"};
+			map_heaven = {"11":"me", "24":"e59"};
+			break;
+		case 8:
+			map_hell = {"11":"me", "15":"e34", "21":"e59"};
+			map_earth = {"11":"me", "13":"g60", "24":"b10", "33":"g30"};
+			map_heaven = {"11":"me", "24":"e59"};
+			break;
+		case 9:
+			map_hell = {"11":"me", "15":"e34", "21":"e59"};
+			map_earth = {"11":"me", "13":"g60", "24":"b10", "33":"g30"};
+			map_heaven = {"11":"me", "24":"e59"};
+			break;
+		case 10:
+			map_hell = {"11":"me", "15":"e34", "21":"e59"};
+			map_earth = {"11":"me", "13":"g60", "24":"b10", "33":"g30"};
+			map_heaven = {"11":"me", "24":"e59"};
+			break;
+		default:
+			break;
+	}
+}
+
+function init()
+{
+	map_heaven = {"11":"me"};
+	map_hell = {"11":"me"};
+	map_earth = {"11":"me"};
+	// Hell
+	block_list = []
+	$(".game").each(function(){
+		block_list.push(this.id);
+	});
+	block_list.splice(0,1);	// Remove first element.
+
+	var number_of_enemies = Math.floor(Math.random() * 6) + 3;
+
+	for (var i = 0; i < number_of_enemies; i++) {
+		var key = Math.floor(Math.random() * block_list.length);
+		var power = Math.floor(Math.random() * 101);
+		map_hell[block_list[key]] = "e"+parseInt(power);
+		block_list.splice(key,1);
+	}
+
+	// Earth
+	block_list = []
+	$(".game").each(function(){
+		block_list.push(this.id);
+	});
+	block_list.splice(0,1);	// Remove first element (me)
+
+	var number_of_good = Math.floor(Math.random() * 4) + 2;
+	var number_of_bad = Math.floor(Math.random() * 4) + 2;
+
+	for (var i = 0; i < number_of_good; i++) {
+		var key = Math.floor(Math.random() * block_list.length);
+		var power = Math.floor(Math.random() * 101);
+		map_earth[block_list[key]] = "g"+parseInt(power);
+		block_list.splice(key,1);
+	}
+	for (var i = 0; i < number_of_bad; i++) {
+		var key = Math.floor(Math.random() * block_list.length);
+		var power = Math.floor(Math.random() * 101);
+		map_earth[block_list[key]] = "b"+parseInt(power);
+		block_list.splice(key,1);
+	}
+
+	// Heaven
+	block_list = []
+	$(".game").each(function(){
+		block_list.push(this.id);
+	});
+	block_list.splice(0,1);	// Remove first element.
+
+	var number_of_enemies = Math.floor(Math.random() * 6) + 3;
+
+	for (var i = 0; i < number_of_enemies; i++) {
+		var key = Math.floor(Math.random() * block_list.length);
+		var power = Math.floor(Math.random() * 101);
+		map_heaven[block_list[key]] = "e"+parseInt(power);
+		block_list.splice(key,1);
+	}
+}
 
 function key_pressed(key)
 {
@@ -88,7 +269,6 @@ function key_pressed(key)
 			else
 				return 0;
 		default:
-			console.log(key);
 			return 0;
 	}
 }
@@ -111,136 +291,7 @@ function send_post(txt, perm)
 		$("#alert").fadeIn();
 	else
 		$("#alert").fadeIn().delay(1000).fadeOut();
-	console.log(txt);
 }
-
-function load()
-{
-	// Welcome message
-	$(".message").hide();
-	$("#welcome-jt").show();
-	$("#game-body").hide();
-	var paramArray = window.location.search.substring(1)
-
-	// Skipping welcome message if need be. It gets irritating during testing.
-	if (paramArray){
-		switch(paramArray){
-			case "start":
-				show_game();
-				break;
-			case "w2":
-				show_welc2();
-				break;
-			default:
-				break;
-		}
-	}
-	
-	// Load resources
-	map_earth["11"]="me";
-	map_heaven["11"]="me";
-	map_hell["11"]="me";
-
-	me["hell"] = "11";
-	me["earth"] = "11";
-	me["heaven"] = "11";
-
-	game_list = []
-	$(".game").each(function(){
-		game_list.push(this.id);
-	});
-
-	init();
-
-	game_status = "earth";
-	refresh();
-}
-
-function init()
-{
-	// Hell
-	block_list = []
-	$(".game").each(function(){
-		block_list.push(this.id);
-	});
-
-	block_list.splice(0,1);	// Remove first element.
-
-	var number_of_enemies = Math.floor(Math.random() * 6) + 3;
-
-	for (var i = 0; i < number_of_enemies; i++) {
-		var key = Math.floor(Math.random() * block_list.length);
-		var power = Math.floor(Math.random() * 101);
-		map_hell[block_list[key]] = "e"+parseInt(power);
-		block_list.splice(key,1);
-	};
-
-	// Earth
-	block_list = []
-	$(".game").each(function(){
-		block_list.push(this.id);
-	});
-
-	block_list.splice(0,1);	// Remove first element (me)
-
-	var number_of_good = Math.floor(Math.random() * 4) + 2;
-	var number_of_bad = Math.floor(Math.random() * 4) + 2;
-
-	for (var i = 0; i < number_of_good; i++) {
-		var key = Math.floor(Math.random() * block_list.length);
-		var power = Math.floor(Math.random() * 101);
-		map_earth[block_list[key]] = "g"+parseInt(power);
-		block_list.splice(key,1);
-	};
-	for (var i = 0; i < number_of_bad; i++) {
-		var key = Math.floor(Math.random() * block_list.length);
-		var power = Math.floor(Math.random() * 101);
-		map_earth[block_list[key]] = "b"+parseInt(power);
-		block_list.splice(key,1);
-	};
-
-	// Heaven
-	block_list = []
-	$(".game").each(function(){
-		block_list.push(this.id);
-	});
-
-	block_list.splice(0,1);	// Remove first element.
-
-	var number_of_enemies = Math.floor(Math.random() * 6) + 3;
-
-	for (var i = 0; i < number_of_enemies; i++) {
-		var key = Math.floor(Math.random() * block_list.length);
-		var power = Math.floor(Math.random() * 101);
-		map_heaven[block_list[key]] = "e"+parseInt(power);
-		block_list.splice(key,1);
-	};
-}
-
-function to_html(map_char)
-{
-	switch(true)
-	{
-		case(!map_char):
-			return "";
-		case(map_char == "me"):
-			return '<img src="images/f_'+game_status+'.png" class="sprite" alt="You"/>';
-		case(typeof map_char === "undefined"):
-			return "";
-		case(map_char.charAt(0) == "e"):
-			val = Math.floor(Math.random() * 5) + 1;
-			return '<img src="images/enemy'+val+'.png" class="sprite" alt="Power '+map_char.substring(1)+'"/><br/>'+map_char.substring(1);
-		case(map_char.charAt(0) == 'g'):
-			//val = Math.floor(Math.random() * 7) + 1;
-			return '<img src="images/good'+1+'.png" class="sprite" alt="Power '+map_char.substring(1)+'"/><br/>'+map_char.substring(1);
-		case(map_char.charAt(0) == 'b'):
-			val = Math.floor(Math.random() * 7) + 1;
-			return '<img src="images/bad'+1+'.png" class="sprite" alt="Power '+map_char.substring(1)+'"/><br/>'+map_char.substring(1);
-		default:
-			return "";
-	}
-}
-
 
 function show_welc2()
 {
@@ -300,13 +351,13 @@ function refresh(clear)
 		$(".game").html(function(){
 			switch(game_status){
 				case "heaven":
-					return to_html(map_heaven[this.id]);
+					return to_html(map_heaven[this.id],seed);
 					break;
 				case "hell":
-					return to_html(map_hell[this.id]);
+					return to_html(map_hell[this.id],seed);
 					break;
 				case "earth":
-					return to_html(map_earth[this.id]);
+					return to_html(map_earth[this.id],seed);
 					break;
 				default:
 					return "";
@@ -320,8 +371,13 @@ function refresh(clear)
 	my_power["hell"] = (my_power["hell"] < 0) ? 0 : my_power["hell"];
 
 	$("#heaven-health").css("width",my_power["heaven"]+"%");
-	$("#hell-health").css("width",my_power["hell"]+"%");
+	$("#heaven-health").html('<span>Heaven: '+my_power["heaven"]+'/100</span>');
 	$("#earth-health").css("width",my_power["earth"]+"%");
+	$("#earth-health").html('<span>Earth: '+my_power["earth"]+'/100</span>');
+	$("#hell-health").css("width",my_power["hell"]+"%");
+	$("#hell-health").html('<span>Hell: '+my_power["hell"]+'/100</span>');
+
+	$("#level").html(""+glob_level);
 
 	$(".sprite").css("width","90px");
 	$(".sprite").css("height","90px");
@@ -329,21 +385,57 @@ function refresh(clear)
 	var eg = end_game_check()
 	if(eg==1)
 	{
-		send_post("Victory!",1);
+		if (glob_level == num_levels)
+			send_post('Victory! You have completed all the levels!',1);
+		else
+			send_post('Victory! <a href="javascript:load('+(glob_level+1)+')">Next Level</a>',1);
+
 		end_game();
 		// Victory
 	}
 	else if (eg==-1)
 	{
-		send_post("Defeat!",1);
+		send_post('Defeat! <a href="javascript:load('+glob_level+')">Retry</a>',1);
 		end_game();
 		// Loss
 	}
 	else
 	{
 		// Nothing
-
 	}
+}
+
+function to_html(map_char, seed)
+{
+	Math.seed = seed;
+	switch(true)
+	{
+		case(!map_char):
+			return "";
+		case(map_char == "me"):
+			return '<img src="images/f_'+game_status+'.png" class="sprite" alt="You"/>';
+		case(typeof map_char === "undefined"):
+			return "";
+		case(map_char.charAt(0) == "e"):
+			val = Math.floor(Math.seededRandom() * 5) + 1;
+			return '<img src="images/enemy'+val+'.png" class="sprite" alt="Power '+map_char.substring(1)+'"/><br/>'+map_char.substring(1);
+		case(map_char.charAt(0) == 'g'):
+			return '<img src="images/good1.png" class="sprite" alt="Power '+map_char.substring(1)+'"/><br/>'+map_char.substring(1);
+		case(map_char.charAt(0) == 'b'):
+			return '<img src="images/bad1.png" class="sprite" alt="Power '+map_char.substring(1)+'"/><br/>'+map_char.substring(1);
+		default:
+			return "";
+	}
+}
+
+Math.seededRandom = function(max, min) {
+    max = max || 1;
+    min = min || 0;
+ 
+    Math.seed = (Math.seed * 9301 + 49297) % 233280;
+    var rnd = Math.seed / 233280;
+ 
+    return min + rnd * (max - min);
 }
 
 function end_game()

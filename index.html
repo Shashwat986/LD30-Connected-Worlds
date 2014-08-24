@@ -34,7 +34,7 @@
 
   </head>
 
-  <body onload="load()">
+  <body onload="load(1)">
 
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
@@ -53,7 +53,24 @@
             <li id="nav-earth" class="active"><a href="javascript:earth();">Earth</a></li>
             <li id="nav-hell"><a href="javascript:hell();">Hell</a></li>
           </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="javascript:load()">Retry</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Level <span class="badge" id="level">1</span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="javascript:load(1)">Level 1</a></li>
+                <li><a href="javascript:load(2)">Level 2</a></li>
+                <li><a href="javascript:load(3)">Level 3</a></li>
+                <li><a href="javascript:load(4)">Level 4</a></li>
+                <li><a href="javascript:load(5)">Level 5</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Random Level</a></li>
+                <li><a href="javascript:load(0)">Randomly Generated Level <br/>(May be unsolvable)</a></li>
+              </ul>
+            </li>
+          </ul>
         </div><!--/.nav-collapse -->
+
       </div>
     </div>
 
@@ -78,7 +95,7 @@
         <h2> Connected Worlds </h2>
         <p id="message"></p>
         <div class="progress"><div id="heaven-health" class="progress-bar progress-bar-info" role="progressbar" style="width: 50%;"><span>Heaven</span></div></div>
-        <div class="progress"><div id="earth-health" class="progress-bar progress-bar-success" role="progressbar"style="width: 100%;"><span>Earth</span></div></div>
+        <!--<div class="progress"><div id="earth-health" class="progress-bar progress-bar-success" role="progressbar"style="width: 100%;"><span>Earth</span></div></div>-->
         <div class="progress"><div id="hell-health" class="progress-bar progress-bar-warning" role="progressbar" style="width: 50%;"><span>Hell</span></div></div>
       </div>
 
@@ -126,7 +143,7 @@
           </td>
           <td id="35" class="game col-md-2 earth">
           </td>
-          <td id="36" class="game col-md-2 earth">
+          <td id="36" class="game col-md-2 earth win-square">
           </td>
         </tr>
       </tbody></table>
