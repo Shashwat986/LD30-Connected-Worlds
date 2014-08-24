@@ -87,12 +87,12 @@ function load_level(level)
 			map_heaven = {"11":"me", "24":"e59"};
 			break;
 		case 4:
-			map_hell = {"11":"me", "15":"e34", "21":"e59"};
-			map_earth = {"11":"me", "13":"g60", "24":"b10", "33":"g30"};
-			map_heaven = {"11":"me", "24":"e59"};
+			map_hell = {"11":"me", "15":"e40", "21":"e49"};
+			map_earth = {"11":"me", "13":"g30", "14":"b10", "15":"g25", "22":"g24"};
+			map_heaven = {"11":"me", "26":"e99"};
 			break;
 		case 5:
-			map_hell = {"11":"me", "15":"e34", "21":"e59"};
+			map_hell = {"11":"me", "12":"e51", "21":"e59"};
 			map_earth = {"11":"me", "13":"g60", "24":"b10", "33":"g30"};
 			map_heaven = {"11":"me", "24":"e59"};
 			break;
@@ -142,7 +142,7 @@ function init()
 
 	for (var i = 0; i < number_of_enemies; i++) {
 		var key = Math.floor(Math.random() * block_list.length);
-		var power = Math.floor(Math.random() * 101);
+		var power = Math.floor(Math.random() * 100);
 		map_hell[block_list[key]] = "e"+parseInt(power);
 		block_list.splice(key,1);
 	}
@@ -159,13 +159,13 @@ function init()
 
 	for (var i = 0; i < number_of_good; i++) {
 		var key = Math.floor(Math.random() * block_list.length);
-		var power = Math.floor(Math.random() * 101);
+		var power = Math.floor(Math.random() * 100);
 		map_earth[block_list[key]] = "g"+parseInt(power);
 		block_list.splice(key,1);
 	}
 	for (var i = 0; i < number_of_bad; i++) {
 		var key = Math.floor(Math.random() * block_list.length);
-		var power = Math.floor(Math.random() * 101);
+		var power = Math.floor(Math.random() * 100);
 		map_earth[block_list[key]] = "b"+parseInt(power);
 		block_list.splice(key,1);
 	}
@@ -181,7 +181,7 @@ function init()
 
 	for (var i = 0; i < number_of_enemies; i++) {
 		var key = Math.floor(Math.random() * block_list.length);
-		var power = Math.floor(Math.random() * 101);
+		var power = Math.floor(Math.random() * 100);
 		map_heaven[block_list[key]] = "e"+parseInt(power);
 		block_list.splice(key,1);
 	}
@@ -428,6 +428,7 @@ function to_html(map_char, seed)
 	}
 }
 
+// http://indiegamr.com/generate-repeatable-random-numbers-in-js/
 Math.seededRandom = function(max, min) {
     max = max || 1;
     min = min || 0;
