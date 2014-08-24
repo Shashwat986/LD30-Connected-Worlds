@@ -226,7 +226,7 @@ function key_pressed(key)
 			else if (check1.charAt(0) == 'e')	// If next block has enemy
 			{
 				power = parseInt(check1.substring(1));
-				if (power < my_power[game_status])
+				if (power <= my_power[game_status])
 				{
 					send_post("Alien Destroyed!");
 					eval('map_'+game_status+'[game_list[ind]] = "";');
