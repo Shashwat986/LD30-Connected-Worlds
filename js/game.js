@@ -92,14 +92,14 @@ function load_level(level)
 			map_heaven = {"11":"me", "26":"e99"};
 			break;
 		case 5:
-			map_hell = {"11":"me", "12":"e51", "21":"e59"};
-			map_earth = {"11":"me", "13":"g60", "24":"b10", "33":"g30"};
-			map_heaven = {"11":"me", "24":"e59"};
+			map_hell = {"11":"me", "13":"e83", "24":"e42"};
+			map_earth = {"11":"me", "14":"b49", "22":"g41", "24":"b11", "25":"g14", "32":"g66", "34":"g37"};
+			map_heaven = {"11":"me", "14":"e85"};
 			break;
 		case 6:
-			map_hell = {"11":"me", "15":"e34", "21":"e59"};
-			map_earth = {"11":"me", "13":"g60", "24":"b10", "33":"g30"};
-			map_heaven = {"11":"me", "24":"e59"};
+			map_hell = {"11":"me", "13":"e83", "24":"e42"};
+			map_earth = {"11":"me", "14":"b49", "22":"g41", "24":"b11", "25":"g14", "32":"g66", "34":"g37"};
+			map_heaven = {"11":"me", "14":"e85"};
 			break;
 		case 7:
 			map_hell = {"11":"me", "15":"e34", "21":"e59"};
@@ -235,6 +235,11 @@ function key_pressed(key)
 					refresh();
 					return 0;
 				}
+				else
+				{
+					send_post("The alien is too powerful!");
+					return 0;
+				}
 			}
 			else if (check1.charAt(0) == 'b' || check1.charAt(0) == 'g')	// If next block has ability
 			{
@@ -275,7 +280,7 @@ function key_pressed(key)
 
 function deed_query(deed, power)
 {
-	var decision = confirm("Perform "+deed+" deed? Adds "+power+" power.");
+	var decision = confirm("Do you want to perform "+deed+" deed? Adds "+power+" power. Press OK to perform deed, Cancel to reject deed and move on.");
 	if (decision)
 		return 1;
 	else
